@@ -1,16 +1,37 @@
 'use strict';
 
-const ADVERT_COUNT = 10;
-const locationMinX = 35.65000;
-const locationMaxX = 35.70000;
-const locationMinY = 139.70000;
-const locationMaxY = 139.80000;
-
-const TYPE = ['palace', 'flat', 'house', 'bungalow'];
-const CHECKIN = ['12:00', '13:00', '14:00'];
-const CHECKOUT = ['12:00', '13:00', '14:00'];
-const FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
-const PHOTOS = ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'];
+const OFFER = {
+  ADVERT_COUNT: 10,
+  LOCATION: {
+    X: {
+      MIN: 35.65000,
+      MAX: 35.70000,
+    },
+    Y: {
+      MIN: 139.70000,
+      MAX: 139.80000,
+    },
+  },
+  PRICES: {
+    MIN: 0,
+    MAX: 1000000,
+  },
+  ROOMS: {
+    MIN: 0,
+    MAX: 1000000,
+  },
+  GUESTS: {
+    MIN: 0,
+    MAX: 1000000,
+  },
+  TITLES: ['Чудесная однушка с видом на набережную', 'Огромная студия для большой компании', 'Вариант для холостяка', 'Незабываемые ощущения', 'Хозяин - кот'],
+  DESCRIPTIONS: ['К нам можно с детьми и котиками','Если боитесь высоты, поищите другой вариант', 'На первом этаже три ресторана и Макдональдс', 'У нас можно закатить вечеринку', 'Туалет на улице, кровать под открытым небом'],
+  TYPES: ['palace', 'flat', 'house', 'bungalow'],
+  CHECKINS: ['12:00', '13:00', '14:00'],
+  CHECKOUTS: ['12:00', '13:00', '14:00'],
+  FEATURES: ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'],
+  PHOTOS: ['http://o0.github.io/assets/images/tokyo/hotel1.jpg', 'http://o0.github.io/assets/images/tokyo/hotel2.jpg', 'http://o0.github.io/assets/images/tokyo/hotel3.jpg'],
+}
 
 const getRandomInteger = (min, max) => {
   min = Math.ceil(min);
@@ -40,12 +61,12 @@ const getRandomNumber = (min, max, decimalPlaces) => {
   throw new Error('Введено значение вне диапазона');
 };
 
-const getRandomArrayElement = (arr) => {
-  return arr[getRandomInteger(0, arr.length-1)]
+const getRandomElementArr = (arr) => {
+  return arr[getRandomInteger(0, arr.length - 1)]
 }
 
 const getArrRandomLength = (arr) => {
-  return arr.slice(0, getRandomInteger(0, arr.length-1));
+  return arr.slice(0, getRandomInteger(0, arr.length - 1));
 }
 
 const createAdvert = () => {
@@ -54,23 +75,23 @@ const createAdvert = () => {
       avatar: `img/avatars/user0${getRandomInteger(1, 8)}.png`,
     },
     offer: {
-      title: 'Студия с панорамным видом',
+      title: getRandomElementArr(OFFER.TITLES),
       address: `${location.x, location.y}`,
-      price: `${getRandomInteger(0, 1000000)} руб.`,
-      type: getRandomArrayElement(TYPE),
-      rooms: `${getRandomInteger(0, 1000000)} комн.`,
-      guests: `${getRandomInteger(0, 1000000)} чел.`,
-      checkin: getRandomArrayElement(CHECKIN),
-      checkout: getRandomArrayElement(CHECKOUT),
-      features: getArrRandomLength(FEATURES),
-      description: 'Светлая большая студия в новом доме. Закрытый двор. Панорамный вид на парк.',
-      photos: getArrRandomLength(PHOTOS),
+      price: getRandomInteger(OFFER.PRICES.MIN, OFFER.PRICES.MAX),
+      type: getRandomElementArr(OFFER.TYPES),
+      rooms: getRandomInteger(OFFER.ROOMS.MIN, OFFER.ROOMS.MAX) ,
+      guests: getRandomInteger(OFFER.GUESTS.MIN, OFFER.GUESTS.MAX) ,
+      checkin: getRandomElementArr(OFFER.CHECKINS),
+      checkout: getRandomElementArr(OFFER.CHECKOUTS),
+      features: getArrRandomLength(OFFER.FEATURES),
+      description: getRandomElementArr(OFFER.DESCRIPTIONS),
+      photos: getArrRandomLength(OFFER.PHOTOS),
     },
     location: {
-      x: getRandomNumber(locationMinX, locationMaxX, 2),
-      y: getRandomNumber(locationMinY, locationMaxY, 2),
+      x: getRandomNumber(OFFER.LOCATION.X.MIN, OFFER.LOCATION.X.MAX, 5),
+      y: getRandomNumber(OFFER.LOCATION.Y.MIN, OFFER.LOCATION.Y.MAX, 5),
     },
   }
 }
 
-new Array(ADVERT_COUNT).fill(null).map(() => createAdvert());
+new Array(OFFER.ADVERT_COUNT).fill(null).map(createAdvert);
