@@ -61,4 +61,6 @@ const createAdvert = () => {
   }
 }
 
-new Array(OFFER.ADVERT_COUNT).fill(null).map(createAdvert);
+const adverts = new Array(OFFER.ADVERT_COUNT).fill(null).map(createAdvert);
+
+export {adverts}; 

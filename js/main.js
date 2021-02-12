@@ -1,1 +1,1 @@
-import './data.js';
+import {adverts} from './data.js';
