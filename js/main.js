@@ -1,3 +1,5 @@
 import {adverts} from './data.js';
 
-import './similar-adverts.js';
+import {createCard} from './card.js';
+
+createCard(adverts[0]);

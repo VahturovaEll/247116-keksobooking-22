@@ -34,4 +34,22 @@ const getArrRandomLength = (arr) => {
   return arr.slice(0, getRandomInteger(0, arr.length - 1));
 }
 
-export { getRandomInteger, getRandomNumber, getRandomElementArr, getArrRandomLength };
+const words = {
+  rooms: ['комнатa', 'комнаты', 'комнат'],
+  guests: ['гостя', 'гостей', 'гостей'],
+}
+
+const getWords = (count, word) => {
+  const num = count % 100;
+  const mod = num  % 10;
+
+  if (num !== 11 && mod === 1) {
+    return words[word][0]
+  } else if ( mod >= 2 && mod <= 4 && (num < 10 || num > 20)) {
+    return words[word][1]
+  } else {
+    return words[word][2]
+  }
+}
+
+export {getRandomInteger, getRandomNumber, getRandomElementArr, getArrRandomLength, getWords};
