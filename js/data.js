@@ -1,4 +1,4 @@
-import { getRandomInteger, getRandomNumber, getRandomElementArr, getArrRandomLength } from './random.js';
+import { getRandomInteger, getRandomNumber, getRandomElementArr, getArrRandomLength } from './utils.js';
 
 const OFFER = {
   ADVERT_COUNT: 10,
@@ -63,4 +63,4 @@ const createAdvert = () => {
 
 const adverts = new Array(OFFER.ADVERT_COUNT).fill(null).map(createAdvert);
 
-export {adverts}; 
+export {adverts};
