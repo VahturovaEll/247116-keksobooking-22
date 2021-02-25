@@ -1,10 +1,25 @@
+const titleLength = {
+  min: 30,
+  max: 100,
+};
+const minPriceOfType = {
+  bungalow: '0',
+  flat: '1000',
+  house: '5000',
+  palace: '10000',
+};
 const mapFilter = document.querySelector('.map__filters');
 const mapFilterBlocks = mapFilter.children;
 const form = document.querySelector('.ad-form');
 const formBlocks = form.children;
 const typeForm = form.querySelector('#type');
-const price = form.querySelector('#price');
-const address = form.querySelector('#address');
+const priceForm = form.querySelector('#price');
+const addressForm = form.querySelector('#address');
+const titleForm = form.querySelector('#title');
+const timeIn = document.querySelector('#timein');
+const timeOut = document.querySelector('#timeout');
+//const roomNumber = form.querySelector('#room_number');
+//const capacity = form.querySelector('#capacity');
 
 const setDisabled = (elements) => {
   for (let element of elements) {
@@ -29,58 +44,63 @@ const setState = (disabled) => {
     setEnabled(mapFilterBlocks);
     form.classList.remove('ad-form--disabled');
     setEnabled(formBlocks);
-    address.setAttribute('readonly', 'readonly');
+    addressForm.setAttribute('readonly', 'readonly');
   }
 };
 
 setState(true);
 
+const onTitleChange = () => {
+  const title = titleForm.value.length;
+
+  if (title < titleLength.min) {
+    titleForm.setCustomValidity(`Ещё ${titleLength.min - title} симв.`);
+  } else if (title > titleLength.max) {
+    titleForm.setCusttomValidity(`Лишних ${title - titleLength.max} симв.`);
+  } else {
+    titleForm.setCustomValidity('');
+  }
+  titleForm.reportValidity();
+}
+/*
 const onPriceValue = (evt) => {
+  if (evt.target.value) {
+    setCustomValidity(`Стоимость  не может быть меньше ${}`);
+  } else if (evt.target.value) {
+    setCusttomValidity(`Стоимость не может быть больше ${}`);
+  } else {
+    setCustomValidity('');
+  }
+  reportValidity();
+}
+*/
+
+const onPriceChange = (evt) => {
   const typeValue = evt.target.value;
   if (typeValue === 'bungalow') {
-    price.setAttribute('min', 0);
-    price.setAttribute('placeholder', 0);
+    priceForm.setAttribute('min', `${minPriceOfType.bungalow}`);
+    priceForm.setAttribute('placeholder', `${minPriceOfType.bungalow}`);
   } else if (typeValue === 'flat') {
-    price.setAttribute('min', 1000);
-    price.setAttribute('placeholder', 1000);
+    priceForm.setAttribute('min', `${minPriceOfType.flat}`);
+    priceForm.setAttribute('placeholder', `${minPriceOfType.flat}`);
   } else if (typeValue === 'house') {
-    price.setAttribute('min', 5000);
-    price.setAttribute('placeholder', 5000);
+    priceForm.setAttribute('min', `${minPriceOfType.house}`);
+    priceForm.setAttribute('placeholder', `${minPriceOfType.house}`);
   } else if (typeValue === 'palace') {
-    price.setAttribute('min', 10000);
-    price.setAttribute('placeholder', 10000);
+    priceForm.setAttribute('min', `${minPriceOfType.palace}`);
+    priceForm.setAttribute('placeholder', `${minPriceOfType.palace}`);
   }
 }
 
-typeForm.addEventListener('change', onPriceValue);
-
-const timeIn = document.querySelector('#timein');
-const timeOut = document.querySelector('#timeout');
-
-const onTimeOut = (evt) => {
-  const timeInValue = evt.target.value;
-  if (timeInValue === '12:00') {
-    timeOut.value = '12:00';
-  } else if (timeInValue === '13:00') {
-    timeOut.value = '13:00';
-  } else if (timeInValue === '14:00') {
-    timeOut.value = '14:00';
-  }
+const onTimeChange = (evt) => {
+  timeIn.value = evt.target.value;
+  timeOut.value = evt.target.value;
 }
 
-timeIn.addEventListener('change', onTimeOut);
-
-const onTimeIn = (evt) => {
-  const timeOutValue = evt.target.value;
-  if (timeOutValue === '12:00') {
-    timeIn.value = '12:00';
-  } else if (timeOutValue === '13:00') {
-    timeIn.value = '13:00';
-  } else if (timeOutValue === '14:00') {
-    timeIn.value = '14:00';
-  }
-}
-
-timeOut.addEventListener('change', onTimeIn);
+titleForm.addEventListener('input', onTitleChange);
+typeForm.addEventListener('change', onPriceChange);/*
+priceForm.addEventListener('input', onPriceValue);*/
+timeIn.addEventListener('change', onTimeChange);
+timeOut.addEventListener('change', onTimeChange);
 
 export {setState};
