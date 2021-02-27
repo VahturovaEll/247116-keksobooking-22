@@ -33,8 +33,8 @@ const setEnabled = (elements) => {
   }
 }
 
-const setState = (disabled) => {
-  if (disabled === true) {
+const setState = (disabled = true) => {
+  if (disabled) {
     mapFilter.classList.add('map__filters--disabled');
     setDisabled(mapFilterBlocks);
     form.classList.add('ad-form--disabled');
@@ -48,7 +48,12 @@ const setState = (disabled) => {
   }
 };
 
-setState(true);
+setState();
+
+const onPriceChange = () => {
+  priceForm.placeholder = minPriceOfType[typeForm.value];
+  priceForm.min = minPriceOfType[typeForm.value];
+}
 
 const onTitleChange = () => {
   const title = titleForm.value.length;
@@ -62,45 +67,41 @@ const onTitleChange = () => {
   }
   titleForm.reportValidity();
 }
-/*
+
+const updateAddress = (addressForm, coordinates) => {
+  const lat = coordinates.lat.toFixed(5);
+  const lng = coordinates.lng.toFixed(5);
+  addressForm.value = `${lat} ${lng}`;
+}
+
 const onPriceValue = (evt) => {
-  if (evt.target.value) {
-    setCustomValidity(`Стоимость  не может быть меньше ${}`);
-  } else if (evt.target.value) {
-    setCusttomValidity(`Стоимость не может быть больше ${}`);
+  const priceValue = evt.target.validity;
+  if (priceValue.rangeUnderflow) {
+    evt.target.setCustomValidity(`Цена не ниже ${evt.target.min}`);
+  } else if (priceValue
+    .rangeOverflow) {
+    evt.target.setCustomValidity(`Цена не больше ${evt.target.max}`);
   } else {
-    setCustomValidity('');
+    evt.target.setCustomValidity('');
   }
-  reportValidity();
-}
-*/
-
-const onPriceChange = (evt) => {
-  const typeValue = evt.target.value;
-  if (typeValue === 'bungalow') {
-    priceForm.setAttribute('min', `${minPriceOfType.bungalow}`);
-    priceForm.setAttribute('placeholder', `${minPriceOfType.bungalow}`);
-  } else if (typeValue === 'flat') {
-    priceForm.setAttribute('min', `${minPriceOfType.flat}`);
-    priceForm.setAttribute('placeholder', `${minPriceOfType.flat}`);
-  } else if (typeValue === 'house') {
-    priceForm.setAttribute('min', `${minPriceOfType.house}`);
-    priceForm.setAttribute('placeholder', `${minPriceOfType.house}`);
-  } else if (typeValue === 'palace') {
-    priceForm.setAttribute('min', `${minPriceOfType.palace}`);
-    priceForm.setAttribute('placeholder', `${minPriceOfType.palace}`);
-  }
+  evt.target.reportValidity();
 }
 
-const onTimeChange = (evt) => {
-  timeIn.value = evt.target.value;
+const onTimeInChange = (evt) => {
   timeOut.value = evt.target.value;
 }
 
-titleForm.addEventListener('input', onTitleChange);
-typeForm.addEventListener('change', onPriceChange);/*
-priceForm.addEventListener('input', onPriceValue);*/
-timeIn.addEventListener('change', onTimeChange);
-timeOut.addEventListener('change', onTimeChange);
+const onTimeOutChange = (evt) => {
+  timeIn.value = evt.target.value;
+}
 
-export {setState};
+//const roomNumber = form.querySelector('#room_number');
+//const capacity = form.querySelector('#capacity');
+
+titleForm.addEventListener('input', onTitleChange);
+typeForm.addEventListener('change', onPriceChange);
+priceForm.addEventListener('input', onPriceValue);
+timeIn.addEventListener('change', onTimeInChange);
+timeOut.addEventListener('change', onTimeOutChange);
+
+export {setState, updateAddress, addressForm};

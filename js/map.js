@@ -1,50 +1,50 @@
 /* global L:readonly */
-
 import {adverts} from './data.js';
 import {createCard} from './card.js';
-import {setState} from './form.js';
+import {setState, updateAddress, addressForm} from './form.js';
 
-const centerTokyo = {
-  x: 35.68950,
-  y: 139.69171,
+const CENTER_TOKYO = {
+  lat: 35.68950,
+  lng: 139.75388,
 };
-const zoomMap = 12;
+const ZOOM_MAP = 12;
+const PIN_MAIN = {
+  iconUrl: 'img/main-pin.svg',
+  iconPin: [52, 52],
+  iconAncor: [26, 52],
+};
+const PIN_AD = {
+  iconUrl: 'img/pin.svg',
+  iconPin: [32, 32],
+  iconAncor: [16, 32],
+};
 
-const sizesPinMain = {
-  width: 52,
-  height: 52,
-};
-const ancorePinMain = {
-  width: sizesPinMain.width/2,
-  height: sizesPinMain.height,
-};
+const LeafletProperties = {
+  TILE_LAYER: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+}
 
 const map = L.map('map-canvas')
   .on('load', () => {
+    updateAddress(addressForm, CENTER_TOKYO);
     setState(false);
-  }).setView({
-    lat: centerTokyo.x,
-    lng: centerTokyo.y,
-  }, zoomMap);
+  }).setView(CENTER_TOKYO, ZOOM_MAP);
 
 L.tileLayer(
-  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+  LeafletProperties.TILE_LAYER,
   {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+    attribution: LeafletProperties.ATTRIBUTION,
   },
 ).addTo(map);
 
 const mainIcon = L.icon({
-  iconUrl: 'img/main-pin.svg',
-  iconSize: [sizesPinMain.width, sizesPinMain.height],
-  iconAnchor: [ancorePinMain.width, ancorePinMain.height],
+  iconUrl: PIN_MAIN.iconUrl,
+  iconSize: PIN_MAIN.iconPin,
+  iconAnchor: PIN_MAIN.iconAncor,
 });
 
 const mainMarker = L.marker(
-  {
-    lat: centerTokyo.x,
-    lng: centerTokyo.y,
-  },
+  CENTER_TOKYO,
   {
     draggable: true,
     icon: mainIcon,
@@ -53,29 +53,24 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-const getCoordinate = (evt) => {
-  const address = document.querySelector('#address');
-  const lat = evt.target.getLatLng().lat.toFixed(5);
-  const lng = evt.target.getLatLng().lng.toFixed(5);
-  address.value = `${lat} ${lng}`;
-};
+mainMarker.on('moveend', (evt) => {
+  updateAddress(addressForm, evt.target.getLatLng());
+});
 
-mainMarker.on('moveend', getCoordinate);
+const icon = L.icon({
+  iconUrl: PIN_AD.iconUrl,
+  iconSize: PIN_AD.iconPin,
+  iconAnchor: PIN_AD.iconAncor,
+});
 
-adverts.forEach(({author, offer, location}) => {
-  const lat = location.x;
-  const lng = location.y;
-
-  const icon = L.icon({
-    iconUrl: 'img/pin.svg',
-    iconSize: [40, 40],
-    iconAnchor: [20, 40],
-  });
+adverts.forEach((adv) => {
+  const lat = adv.location.x;
+  const lng = adv.location.y;
 
   const marker = L.marker(
     {
-      lat,
-      lng,
+      lat: lat,
+      lng: lng,
     },
     {
       icon: icon,
@@ -84,7 +79,7 @@ adverts.forEach(({author, offer, location}) => {
 
   marker
     .addTo(map)
-    .bindPopup(createCard({author, offer}),
+    .bindPopup(createCard(adv),
       {
         keepInView: true,
       },

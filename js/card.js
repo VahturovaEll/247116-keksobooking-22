@@ -60,6 +60,8 @@ const createCard = (card) => {
   getPhotosCard(card.offer.photos, photosCard);
 
   mapPopup.appendChild(similarCardElement);
+
+  return similarCardElement;
 }
 
 export {createCard};
