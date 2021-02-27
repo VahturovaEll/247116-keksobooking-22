@@ -1,7 +1,7 @@
 /* global L:readonly */
 import {adverts} from './data.js';
 import {createCard} from './card.js';
-import {setState, updateAddress, addressForm} from './form.js';
+import {setState, updateAddress} from './form.js';
 
 const CENTER_TOKYO = {
   lat: 35.68950,
@@ -26,7 +26,7 @@ const LeafletProperties = {
 
 const map = L.map('map-canvas')
   .on('load', () => {
-    updateAddress(addressForm, CENTER_TOKYO);
+    updateAddress(CENTER_TOKYO);
     setState(false);
   }).setView(CENTER_TOKYO, ZOOM_MAP);
 
@@ -53,8 +53,8 @@ const mainMarker = L.marker(
 
 mainMarker.addTo(map);
 
-mainMarker.on('moveend', (evt) => {
-  updateAddress(addressForm, evt.target.getLatLng());
+mainMarker.on('move', (evt) => {
+  updateAddress(evt.target.getLatLng());
 });
 
 const icon = L.icon({
