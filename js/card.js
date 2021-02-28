@@ -7,10 +7,10 @@ const typeToHouse = {
   bungalow: 'Бунгало',
 };
 
-const mapPopup = document.querySelector('.map__canvas');
 const similarCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const getFeaturesCard = (arr, list) => {
+const creatFeaturesCard = (arr, list) => {
+  list.innerHTML = '';
   arr.forEach((element) => {
     const feature = document.createElement('li');
     feature.classList.add('popup__feature', `popup__feature--${element}`);
@@ -18,7 +18,8 @@ const getFeaturesCard = (arr, list) => {
   });
 }
 
-const getPhotosCard = (arr, list) => {
+const creatPhotosCard = (arr, list) => {
+  list.innerHTML = '';
   if (arr.length) {
     arr.forEach((element) => {
       const photo = similarCardTemplate.querySelector('.popup__photo').cloneNode(true);
@@ -48,18 +49,10 @@ const createCard = (card) => {
   card.offer.type ? typeCard.textContent = typeToHouse[card.offer.type] : typeCard.remove();
   card.author.avatar ? avatarCard.src = card.author.avatar : avatarCard.remove();
   card.offer.description ? descriptionCard.textContent = card.offer.description: descriptionCard.remove();
-
   capacityCard.textContent = `${card.offer.rooms} ${getWords(card.offer.rooms, 'rooms')} для ${card.offer.guests} ${getWords(card.offer.guests, 'guests')}`;
-
   timeCard.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
-
-  featuresList.innerHTML = '';
-  getFeaturesCard(card.offer.features, featuresList);
-
-  photosCard.innerHTML = '';
-  getPhotosCard(card.offer.photos, photosCard);
-
-  mapPopup.appendChild(similarCardElement);
+  creatFeaturesCard(card.offer.features, featuresList);
+  creatPhotosCard(card.offer.photos, photosCard);
 
   return similarCardElement;
 }

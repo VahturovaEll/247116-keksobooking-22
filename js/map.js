@@ -1,13 +1,13 @@
 /* global L:readonly */
 import {adverts} from './data.js';
 import {createCard} from './card.js';
-import {setState, updateAddress} from './form.js';
 
+const ROUNDING = 5;
+const ZOOM_MAP = 12;
 const CENTER_TOKYO = {
   lat: 35.68950,
   lng: 139.75388,
 };
-const ZOOM_MAP = 12;
 const PIN_MAIN = {
   iconUrl: 'img/main-pin.svg',
   iconPin: [52, 52],
@@ -24,10 +24,50 @@ const LeafletProperties = {
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }
 
+const mapFilter = document.querySelector('.map__filters');
+const mapFilterBlocks = mapFilter.children;
+const form = document.querySelector('.ad-form');
+const formBlocks = form.children;
+
+const setDisabled = (elements) => {
+  for (let element of elements) {
+    element.disabled = true;
+  }
+}
+
+const setEnabled = (elements) => {
+  for (let element of elements) {
+    element.disabled = false;
+  }
+}
+
+const deactivePage = () => {
+  mapFilter.classList.add('map__filters--disabled');
+  setDisabled(mapFilterBlocks);
+  form.classList.add('ad-form--disabled');
+  setDisabled(formBlocks);
+}
+
+deactivePage();
+
+const activePage = () => {
+  mapFilter.classList.remove('map__filters--disabled');
+  setEnabled(mapFilterBlocks);
+  form.classList.remove('ad-form--disabled');
+  setEnabled(formBlocks);
+}
+
+const updateAddress = (coordinates) => {
+  const addressForm = form.querySelector('#address');
+  const lat = coordinates.lat.toFixed(ROUNDING);
+  const lng = coordinates.lng.toFixed(ROUNDING);
+  addressForm.value = `${lat} ${lng}`;
+}
+
 const map = L.map('map-canvas')
   .on('load', () => {
     updateAddress(CENTER_TOKYO);
-    setState(false);
+    activePage();
   }).setView(CENTER_TOKYO, ZOOM_MAP);
 
 L.tileLayer(
