@@ -60,9 +60,16 @@ const onTimeOutChange = (evt) => {
   timeIn.value = evt.target.value;
 }
 
-//не понимаю как реализовать
 const onRoomsChange = () => {
-  capacity.value = roomsToGuests[roomNumber.value];
+  const capacityOptions = capacity.options;
+  for (let capacityOption of capacityOptions) {
+    if (roomsToGuests[roomNumber.value].includes(capacityOption.value)) {
+      capacityOption.selected = true;
+      capacityOption.style.display = 'block';
+    } else {
+      capacityOption.style.display = 'none';
+    }
+  }
 }
 
 titleForm.addEventListener('input', onTitleChange);
