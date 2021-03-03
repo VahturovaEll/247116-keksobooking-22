@@ -1,5 +1,3 @@
-import {adverts} from './data.js';
-
-import {createCard} from './card.js';
-
-createCard(adverts[0]);
+import './data.js';
+import './map.js';
+import './form.js';
