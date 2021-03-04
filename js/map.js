@@ -1,6 +1,6 @@
 /* global L:readonly */
-import {adverts} from './data.js';
-import {createCard} from './card.js';
+//import {adverts} from './data.js';
+import {renderCard} from './card.js';
 
 const ROUNDING = 5;
 const ZOOM_MAP = 12;
@@ -103,25 +103,25 @@ const icon = L.icon({
   iconAnchor: PIN_AD.iconAncor,
 });
 
-adverts.forEach((adv) => {
-  const lat = adv.location.x;
-  const lng = adv.location.y;
+const renderPopup = (offers) => {
+  offers.forEach((adv, popup) => {
+    popup = renderCard(adv);
 
-  const marker = L.marker(
-    {
-      lat: lat,
-      lng: lng,
-    },
-    {
-      icon: icon,
-    },
-  );
+    const lat = adv.location.x;
+    const lng = adv.location.y;
 
-  marker
-    .addTo(map)
-    .bindPopup(createCard(adv),
+    const marker = L.marker(
       {
-        keepInView: true,
+        lat: lat,
+        lng: lng,
       },
-    )
-});
+      {
+        icon: icon,
+      },
+    );
+
+    marker.addTo(map).bindPopup(popup);
+  });
+}
+
+export {renderPopup};

@@ -1,3 +1,6 @@
+import {showAlert} from './utils.js';
+import {sendData} from './server.js';
+
 const titleLength = {
   min: 30,
   max: 100,
@@ -14,14 +17,14 @@ const roomsToGuests = {
   3: ['1', '2', '3'],
   100: ['0'],
 };
-const form = document.querySelector('.ad-form');
-const typeForm = form.querySelector('#type');
-const priceForm = form.querySelector('#price');
-const titleForm = form.querySelector('#title');
-const timeIn = document.querySelector('#timein');
-const timeOut = document.querySelector('#timeout');
-const roomNumber = form.querySelector('#room_number');
-const capacity = form.querySelector('#capacity');
+const adForm = document.querySelector('.ad-form');
+const typeForm = adForm.querySelector('#type');
+const priceForm = adForm.querySelector('#price');
+const titleForm = adForm.querySelector('#title');
+const timeIn = adForm.querySelector('#timein');
+const timeOut = adForm.querySelector('#timeout');
+const roomNumber = adForm.querySelector('#room_number');
+const capacity = adForm.querySelector('#capacity');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
@@ -72,9 +75,23 @@ const onRoomsChange = () => {
   }
 }
 
+const setUserFormSubmit = (onSuccess) => {
+  adForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+
+    sendData(
+      () => onSuccess(),
+      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+      new FormData(evt.target),
+    );
+  });
+};
+
 titleForm.addEventListener('input', onTitleChange);
 typeForm.addEventListener('change', onPriceChange);
 priceForm.addEventListener('input', onPriceValue);
 timeIn.addEventListener('change', onTimeInChange);
 timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange)
+
+export {setUserFormSubmit};
