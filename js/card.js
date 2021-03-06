@@ -1,5 +1,4 @@
 import {getWords} from './utils.js';
-import {getData} from './server.js';
 
 const typeToHouse = {
   palace: 'Дворец',
@@ -63,14 +62,4 @@ const clearCard = () => {
   similarCardTemplate.innerHTML = '';
 };
 
-let similarAdverts = [];
-
-const renderAdverts = () => {
-  getData((offers) => {
-    similarAdverts = offers;
-    //console.log(similarAdverts);
-    renderCard(similarAdverts);
-  });
-}
-
-export {renderCard, clearCard, renderAdverts};
+export {renderCard, clearCard};

@@ -1,4 +1,4 @@
-import {showAlert} from './utils.js';
+import {showAlert} from './popup.js';
 import {sendData} from './server.js';
 
 const titleLength = {
@@ -75,17 +75,15 @@ const onRoomsChange = () => {
   }
 }
 
-const setUserFormSubmit = (onSuccess) => {
-  adForm.addEventListener('submit', (evt) => {
-    evt.preventDefault();
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
 
-    sendData(
-      () => onSuccess(),
-      () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
-      new FormData(evt.target),
-    );
-  });
-};
+  sendData(
+    () => onSuccess(),
+    () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
+    new FormData(evt.target),
+  );
+});
 
 titleForm.addEventListener('input', onTitleChange);
 typeForm.addEventListener('change', onPriceChange);
@@ -93,5 +91,3 @@ priceForm.addEventListener('input', onPriceValue);
 timeIn.addEventListener('change', onTimeInChange);
 timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange)
-
-export {setUserFormSubmit};

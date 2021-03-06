@@ -66,3 +66,35 @@ const adverts = new Array(OFFER.ADVERT_COUNT).fill(null).map(createAdvert);
 
 export {adverts};
 */
+import {getData} from './server.js';
+import {renderAdverts} from './map.js';
+
+/*
+let similarAdverts = [];
+
+const renderOffers = () => {
+  getData((offers) => {
+    const advert = similarAdverts.concat(offers);
+    console.log(advert);
+
+    //renderAdverts(advert);
+
+    return advert;
+  });
+};
+
+
+const adverts = renderOffers();
+console.log(adverts);
+export {adverts};*/
+
+//объявления выводятся в консоль, но как их вытащить и дальще с ними работать не пойму
+fetch('https://22.javascript.pages.academy/keksobooking/data')
+  .then((response) => response.json())
+  .then((adverts) => {
+    console.log(adverts);
+  });
+
+//не работает тоже
+getData(renderAdverts);
+

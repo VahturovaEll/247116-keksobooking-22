@@ -103,12 +103,11 @@ const icon = L.icon({
   iconAnchor: PIN_AD.iconAncor,
 });
 
-const renderPopup = (offers) => {
-  offers.forEach((adv, popup) => {
-    popup = renderCard(adv);
+const renderAdverts = (adverts) => {
+  adverts.forEach((advert) => {
 
-    const lat = adv.location.x;
-    const lng = adv.location.y;
+    const lat = advert.location.x;
+    const lng = advert.location.y;
 
     const marker = L.marker(
       {
@@ -120,8 +119,8 @@ const renderPopup = (offers) => {
       },
     );
 
-    marker.addTo(map).bindPopup(popup);
+    marker.addTo(map).bindPopup(renderCard(advert));
   });
 }
 
-export {renderPopup};
+export {renderAdverts};
