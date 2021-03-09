@@ -1,10 +1,54 @@
+import {isEscEvent} from './utils.js';
+
 const ALERT_SHOW_TIME = 5000;
 
-const errorTemplate = document.querySelector('#error').content;
-const error = errorTemplate.querySelector('.error');
-const errorButton = error.querySelector('.error__button');
+const main = document.querySelector('main');
 const successTemplate = document.querySelector('#success').content;
-const success = successTemplate.querySelector('.success');
+const successPopup = successTemplate.querySelector('.success');
+const errorTemplate = document.querySelector('#error').content;
+const errorPopup = errorTemplate.querySelector('.error');
+
+const showSuccessModal = () => {
+  const message = successPopup.cloneNode(true);
+  main.append(message);
+  message.style.zIndex = 1000;
+
+  const onDocumentEscKeydownInSuccess = () => {
+    if (isEscEvent) {
+      onDocumentClickInSuccess();
+    }
+  };
+
+  const onDocumentClickInSuccess = () => {
+    message.remove();
+    document.removeEventListener('click', onDocumentClickInSuccess);
+    document.removeEventListener('keydown', onDocumentEscKeydownInSuccess);
+  };
+
+  document.addEventListener('click', onDocumentClickInSuccess);
+  document.addEventListener('keydown', onDocumentEscKeydownInSuccess);
+};
+
+const showErrorModal = () => {
+  const message = errorPopup.cloneNode(true);
+  main.append(message);
+  message.style.zIndex = 1000;
+
+  const onDocumentEscKeydownInError = () => {
+    if (isEscEvent) {
+      onDocumentClickInError();
+    }
+  };
+
+  const onDocumentClickInError = () => {
+    message.remove();
+    document.removeEventListener('click', onDocumentClickInError);
+    document.removeEventListener('keydown', onDocumentEscKeydownInError);
+  };
+
+  document.addEventListener('click', onDocumentClickInError);
+  document.addEventListener('keydown', onDocumentEscKeydownInError);
+};
 
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
@@ -27,4 +71,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 }
 
-export {showAlert};
+export {showSuccessModal, showErrorModal, showAlert};

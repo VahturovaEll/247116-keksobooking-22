@@ -1,5 +1,4 @@
 /* global L:readonly */
-//import {adverts} from './data.js';
 import {renderCard} from './card.js';
 
 const ROUNDING = 5;
@@ -28,6 +27,7 @@ const mapFilter = document.querySelector('.map__filters');
 const mapFilterBlocks = mapFilter.children;
 const form = document.querySelector('.ad-form');
 const formBlocks = form.children;
+const addressForm = form.querySelector('#address');
 
 const setDisabled = (elements) => {
   for (let element of elements) {
@@ -57,10 +57,13 @@ const activePage = () => {
   setEnabled(formBlocks);
 }
 
-const updateAddress = (coordinates) => {
-  const addressForm = form.querySelector('#address');
-  const lat = coordinates.lat.toFixed(ROUNDING);
-  const lng = coordinates.lng.toFixed(ROUNDING);
+const defaultMap = () => {
+  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
+}
+
+const updateAddress = (location) => {
+  const lat = location.lat.toFixed(ROUNDING);
+  const lng = location.lng.toFixed(ROUNDING);
   addressForm.value = `${lat} ${lng}`;
 }
 
@@ -105,14 +108,10 @@ const icon = L.icon({
 
 const renderAdverts = (adverts) => {
   adverts.forEach((advert) => {
-
-    const lat = advert.location.x;
-    const lng = advert.location.y;
-
     const marker = L.marker(
       {
-        lat: lat,
-        lng: lng,
+        lat: advert.location.lat,
+        lng: advert.location.lng,
       },
       {
         icon: icon,
@@ -123,4 +122,4 @@ const renderAdverts = (adverts) => {
   });
 }
 
-export {renderAdverts};
+export {defaultMap, renderAdverts};

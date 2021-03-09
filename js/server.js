@@ -1,14 +1,20 @@
-const getData = (onSuccess) => {
-  fetch('https://22.javascript.pages.academy/keksobooking/data')
+const URL = 'https://22.javascript.pages.academy/keksobooking';
+const METOD_SEND = 'POST';
+
+const getData = (onSuccess, onFail) => {
+  fetch(`${URL}/data`)
     .then((response) => response.json())
-    .then((offers) => onSuccess(offers));
+    .then((offers) => onSuccess(offers))
+    .catch(() => {
+      onFail('Не удалось загрузить данные с сервера. Повторите попытку позже');
+    });
 };
 
 const sendData = (onSuccess, onFail, body) => {
   fetch(
-    'https://22.javascript.pages.academy/keksobooking',
+    URL,
     {
-      method: 'POST',
+      method: METOD_SEND,
       body,
     },
   )
@@ -16,11 +22,11 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail('Не удалось отправить форму. Попробуйте ещё раз');
+        onFail();
       }
     })
     .catch(() => {
-      onFail('Не удалось отправить форму. Попробуйте ещё раз');
+      onFail();
     });
 };
 

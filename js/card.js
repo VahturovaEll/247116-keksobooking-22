@@ -58,8 +58,4 @@ const renderCard = ({author, offer}) => {
   return similarCardElement;
 }
 
-const clearCard = () => {
-  similarCardTemplate.innerHTML = '';
-};
-
-export {renderCard, clearCard};
+export {renderCard};

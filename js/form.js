@@ -1,5 +1,6 @@
-import {showAlert} from './popup.js';
+import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
+import {defaultMap} from './map.js';
 
 const titleLength = {
   min: 30,
@@ -17,7 +18,9 @@ const roomsToGuests = {
   3: ['1', '2', '3'],
   100: ['0'],
 };
+
 const adForm = document.querySelector('.ad-form');
+const mapFilter = document.querySelector('.map__filters');
 const typeForm = adForm.querySelector('#type');
 const priceForm = adForm.querySelector('#price');
 const titleForm = adForm.querySelector('#title');
@@ -25,6 +28,7 @@ const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
+const adFormReset = adForm.querySelector('.ad-form__reset');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
@@ -75,19 +79,41 @@ const onRoomsChange = () => {
   }
 }
 
-adForm.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-
-  sendData(
-    () => onSuccess(),
-    () => showAlert('Не удалось отправить форму. Попробуйте ещё раз'),
-    new FormData(evt.target),
-  );
-});
-
 titleForm.addEventListener('input', onTitleChange);
 typeForm.addEventListener('change', onPriceChange);
 priceForm.addEventListener('input', onPriceValue);
 timeIn.addEventListener('change', onTimeInChange);
 timeOut.addEventListener('change', onTimeOutChange);
-roomNumber.addEventListener('change', onRoomsChange)
+roomNumber.addEventListener('change', onRoomsChange);
+
+const resetMap = () => {
+  defaultMap();
+};
+
+const onResetForm = () => {
+  mapFilter.reset();
+  adForm.reset();
+  resetMap();
+}
+
+const handleFormSubmit = () => {
+  showSuccessModal();
+  onResetForm();
+}
+
+const handleFormFail = () => {
+  showErrorModal();
+  onResetForm();
+}
+
+adForm.addEventListener('submit', (evt) => {
+  evt.preventDefault();
+  const formData = new FormData(evt.target);
+
+  sendData(handleFormSubmit, handleFormFail, formData);
+});
+
+adFormReset.addEventListener('click', (evt) => {
+  evt.preventDefault();
+  onResetForm();
+});
