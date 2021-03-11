@@ -1,6 +1,7 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
 import {defaultMap} from './map.js';
+import {resetPictures} from './picture.js';
 
 const titleLength = {
   min: 30,
@@ -94,6 +95,7 @@ const onResetForm = () => {
   mapFilter.reset();
   adForm.reset();
   resetMap();
+  resetPictures();
 }
 
 const handleFormSubmit = () => {

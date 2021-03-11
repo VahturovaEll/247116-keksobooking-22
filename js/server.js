@@ -3,11 +3,15 @@ const METOD_SEND = 'POST';
 
 const getData = (onSuccess, onFail) => {
   fetch(`${URL}/data`)
-    .then((response) => response.json())
-    .then((offers) => onSuccess(offers))
-    .catch(() => {
-      onFail('Не удалось загрузить данные с сервера. Повторите попытку позже');
-    });
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      } else {
+        throw new Error(`${response.status} ${response.statusText}`);
+      }
+    })
+    .then(onSuccess)
+    .catch(onFail);
 };
 
 const sendData = (onSuccess, onFail, body) => {
@@ -22,12 +26,10 @@ const sendData = (onSuccess, onFail, body) => {
       if (response.ok) {
         onSuccess();
       } else {
-        onFail();
+        throw new Error(`${response.status} ${response.statusText}`);
       }
     })
-    .catch(() => {
-      onFail();
-    });
+    .catch(onFail);
 };
 
 export {getData, sendData};
