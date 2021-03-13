@@ -1,6 +1,6 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {defaultMap} from './map.js';
+import {resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
 const titleLength = {
@@ -21,7 +21,6 @@ const roomsToGuests = {
 };
 
 const adForm = document.querySelector('.ad-form');
-const mapFilter = document.querySelector('.map__filters');
 const typeForm = adForm.querySelector('#type');
 const priceForm = adForm.querySelector('#price');
 const titleForm = adForm.querySelector('#title');
@@ -87,12 +86,8 @@ timeIn.addEventListener('change', onTimeInChange);
 timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
-const resetMap = () => {
-  defaultMap();
-};
-
 const onResetForm = () => {
-  mapFilter.reset();
+  //mapFilter.reset();
   adForm.reset();
   resetMap();
   resetPictures();

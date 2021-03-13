@@ -1,10 +1,8 @@
 import {isEscEvent} from './utils.js';
 
 const main = document.querySelector('main');
-
 const successTemplate = document.querySelector('#success').content.cloneNode(true);
 const successPopup = successTemplate.querySelector('.success');
-
 const errorTemplate = document.querySelector('#error').content;
 const errorPopup = errorTemplate.querySelector('.error').cloneNode(true);
 const closeErrorButton = errorPopup.querySelector('.error__button');
@@ -17,12 +15,20 @@ const onPopupEscKeydown = (evt) => {
 };
 
 const showSuccessModal = () => {
+  successPopup.addEventListener('click', closePopup);
+
   document.addEventListener('keydown', onPopupEscKeydown);
   main.appendChild(successPopup);
 }
 
-const showErrorModal = () => {
+const showErrorModal = (message) => {
+  errorPopup.querySelector('.error__message').textContent = message;
+
+  closeErrorButton.addEventListener('click', closePopup);
+  errorPopup.addEventListener('click', closePopup);
+
   document.addEventListener('keydown', onPopupEscKeydown);
+
   main.appendChild(errorPopup);
 }
 
@@ -37,8 +43,5 @@ const closePopup = () => {
 
   document.removeEventListener('keydown', onPopupEscKeydown);
 }
-
-main.addEventListener('click', closePopup);
-closeErrorButton.addEventListener('click', closePopup);
 
 export {showSuccessModal, showErrorModal};

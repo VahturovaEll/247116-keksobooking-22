@@ -1,9 +1,9 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-
+/*
 const PhotoSize = {
   WIDTH: 40,
   HEIGHT: 44,
-};
+};*/
 const IMG_DEFAULT = {
   DESCRIPTION: 'Фотография жилья',
   SRC: 'img/muffin-grey.svg',
@@ -13,7 +13,7 @@ const avatarFileChooser = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
 
 const houseFileChooser = document.querySelector('.ad-form__input');
-const housePreview = document.querySelector('.ad-form__photo');
+const housePreview = document.querySelector('.ad-form__photo-preview img');
 
 const setPreviewPhoto = (fileChoose, previewElement) => {
   fileChoose.addEventListener('change', () => {
@@ -37,22 +37,11 @@ const setPreviewPhoto = (fileChoose, previewElement) => {
 };
 
 setPreviewPhoto(avatarFileChooser, avatarPreview);
-
-const createImgElement =  document.createElement('img');
-createImgElement.width = PhotoSize.WIDTH;
-createImgElement.height = PhotoSize.HEIGHT;
-createImgElement.alt = IMG_DEFAULT.DESCRIPTION;
-createImgElement.src = IMG_DEFAULT.SRC;
-housePreview.style.display = 'flex';
-housePreview.style.justifyContent = 'center';
-housePreview.style.alignItems = 'center';
-housePreview.appendChild(createImgElement);
-
-setPreviewPhoto(houseFileChooser, createImgElement);
+setPreviewPhoto(houseFileChooser, housePreview);
 
 const resetPictures = () => {
   avatarPreview.src = IMG_DEFAULT.SRC;
-  createImgElement.src = IMG_DEFAULT.SRC;
+  housePreview.src = IMG_DEFAULT.SRC;
 };
 
 export {resetPictures};
