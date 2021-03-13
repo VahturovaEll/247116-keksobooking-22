@@ -29,7 +29,7 @@ const creatPhotosCard = (arr, list) => {
   }
 }
 
-const createCard = (card) => {
+const renderCard = ({author, offer}) => {
   const similarCardElement = similarCardTemplate.cloneNode(true);
 
   const titleCard = similarCardElement.querySelector('.popup__title');
@@ -43,18 +43,19 @@ const createCard = (card) => {
   const photosCard = similarCardElement.querySelector('.popup__photos');
   const avatarCard = similarCardElement.querySelector('.popup__avatar');
 
-  card.offer.title ? titleCard.textContent = card.offer.title : titleCard.remove();
-  card.offer.address ? addressCard.textContent = card.offer.address : addressCard.remove();
-  card.offer.price ? priceCard.textContent = `${card.offer.price} ₽/ночь`: priceCard.remove() ;
-  card.offer.type ? typeCard.textContent = typeToHouse[card.offer.type] : typeCard.remove();
-  card.author.avatar ? avatarCard.src = card.author.avatar : avatarCard.remove();
-  card.offer.description ? descriptionCard.textContent = card.offer.description: descriptionCard.remove();
-  capacityCard.textContent = `${card.offer.rooms} ${getWords(card.offer.rooms, 'rooms')} для ${card.offer.guests} ${getWords(card.offer.guests, 'guests')}`;
-  timeCard.textContent = `Заезд после ${card.offer.checkin}, выезд до ${card.offer.checkout}`;
-  creatFeaturesCard(card.offer.features, featuresList);
-  creatPhotosCard(card.offer.photos, photosCard);
+
+  offer.title ? titleCard.textContent = offer.title : titleCard.remove();
+  offer.address ? addressCard.textContent = offer.address : addressCard.remove();
+  offer.price ? priceCard.textContent = `${offer.price} ₽/ночь`: priceCard.remove() ;
+  offer.type ? typeCard.textContent = typeToHouse[offer.type] : typeCard.remove();
+  author.avatar ? avatarCard.src = author.avatar : avatarCard.remove();
+  offer.description ? descriptionCard.textContent = offer.description: descriptionCard.remove();
+  capacityCard.textContent = `${offer.rooms} ${getWords(offer.rooms, 'rooms')} для ${offer.guests} ${getWords(offer.guests, 'guests')}`;
+  timeCard.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
+  creatFeaturesCard(offer.features, featuresList);
+  creatPhotosCard(offer.photos, photosCard);
 
   return similarCardElement;
 }
 
-export {createCard};
+export {renderCard};

@@ -1,7 +1,8 @@
 /* global L:readonly */
-import {adverts} from './data.js';
-import {createCard} from './card.js';
+import {renderCard} from './card.js';
+import {checkAllFilters} from './filter.js';
 
+const ADVERTS_COUNT = 10;
 const ROUNDING = 5;
 const ZOOM_MAP = 12;
 const CENTER_TOKYO = {
@@ -24,10 +25,11 @@ const LeafletProperties = {
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }
 
-const mapFilter = document.querySelector('.map__filters');
+const mapFilter = document.querySelector('.map__filters');//
 const mapFilterBlocks = mapFilter.children;
 const form = document.querySelector('.ad-form');
 const formBlocks = form.children;
+const addressForm = form.querySelector('#address');
 
 const setDisabled = (elements) => {
   for (let element of elements) {
@@ -57,10 +59,13 @@ const activePage = () => {
   setEnabled(formBlocks);
 }
 
-const updateAddress = (coordinates) => {
-  const addressForm = form.querySelector('#address');
-  const lat = coordinates.lat.toFixed(ROUNDING);
-  const lng = coordinates.lng.toFixed(ROUNDING);
+const defaultMap = () => {
+  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
+}
+
+const updateAddress = (location) => {
+  const lat = location.lat.toFixed(ROUNDING);
+  const lng = location.lng.toFixed(ROUNDING);
   addressForm.value = `${lat} ${lng}`;
 }
 
@@ -103,25 +108,37 @@ const icon = L.icon({
   iconAnchor: PIN_AD.iconAncor,
 });
 
-adverts.forEach((adv) => {
-  const lat = adv.location.x;
-  const lng = adv.location.y;
+const MARKERS = [];
 
-  const marker = L.marker(
-    {
-      lat: lat,
-      lng: lng,
-    },
-    {
-      icon: icon,
-    },
-  );
+const renderAdverts = (adverts) => {
+  adverts
+    .filter(checkAllFilters)
+    .slice(0, ADVERTS_COUNT)
+    .forEach((advert) => {
+      const marker = L.marker(
+        {
+          lat: advert.location.lat,
+          lng: advert.location.lng,
+        },
+        {
+          icon: icon,
+        },
+      );
 
-  marker
-    .addTo(map)
-    .bindPopup(createCard(adv),
-      {
-        keepInView: true,
-      },
-    )
-});
+      marker.addTo(map).bindPopup(renderCard(advert));
+      MARKERS.push(marker);
+    });
+}
+
+const removeMapMarkers = () => {
+  MARKERS.forEach((marker) => {
+    marker.remove();
+  })
+  map.closePopup();
+};
+
+const resetMap = () => {
+  defaultMap();
+};
+
+export {renderAdverts, resetMap, removeMapMarkers};
