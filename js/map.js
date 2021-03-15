@@ -25,7 +25,7 @@ const LeafletProperties = {
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 }
 
-const mapFilter = document.querySelector('.map__filters');//
+const mapFilter = document.querySelector('.map__filters');
 const mapFilterBlocks = mapFilter.children;
 const form = document.querySelector('.ad-form');
 const formBlocks = form.children;
@@ -59,7 +59,7 @@ const activePage = () => {
   setEnabled(formBlocks);
 }
 
-const defaultMap = () => {
+const defaultCoordMarker = () => {
   mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
 }
 
@@ -108,7 +108,7 @@ const icon = L.icon({
   iconAnchor: PIN_AD.iconAncor,
 });
 
-const MARKERS = [];
+let markers = [];
 
 const renderAdverts = (adverts) => {
   adverts
@@ -126,19 +126,19 @@ const renderAdverts = (adverts) => {
       );
 
       marker.addTo(map).bindPopup(renderCard(advert));
-      MARKERS.push(marker);
+      markers.push(marker);
     });
 }
 
 const removeMapMarkers = () => {
-  MARKERS.forEach((marker) => {
+  markers.forEach((marker) => {
     marker.remove();
   })
   map.closePopup();
 };
 
 const resetMap = () => {
-  defaultMap();
+  defaultCoordMarker();
 };
 
-export {renderAdverts, resetMap, removeMapMarkers};
+export {mapFilter, renderAdverts, resetMap, removeMapMarkers};

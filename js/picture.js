@@ -1,9 +1,5 @@
 const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-/*
-const PhotoSize = {
-  WIDTH: 40,
-  HEIGHT: 44,
-};*/
+
 const IMG_DEFAULT = {
   DESCRIPTION: 'Фотография жилья',
   SRC: 'img/muffin-grey.svg',

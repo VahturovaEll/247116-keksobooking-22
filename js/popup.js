@@ -10,12 +10,12 @@ const closeErrorButton = errorPopup.querySelector('.error__button');
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    closePopup();
+    onClosePopup();
   }
 };
 
 const showSuccessModal = () => {
-  successPopup.addEventListener('click', closePopup);
+  successPopup.addEventListener('click', onClosePopup);
 
   document.addEventListener('keydown', onPopupEscKeydown);
   main.appendChild(successPopup);
@@ -24,15 +24,15 @@ const showSuccessModal = () => {
 const showErrorModal = (message) => {
   errorPopup.querySelector('.error__message').textContent = message;
 
-  closeErrorButton.addEventListener('click', closePopup);
-  errorPopup.addEventListener('click', closePopup);
+  closeErrorButton.addEventListener('click', onClosePopup);
+  errorPopup.addEventListener('click', onClosePopup);
 
   document.addEventListener('keydown', onPopupEscKeydown);
 
   main.appendChild(errorPopup);
 }
 
-const closePopup = () => {
+const onClosePopup = () => {
   if (main.contains(successPopup)) {
     main.removeChild(successPopup)
   }

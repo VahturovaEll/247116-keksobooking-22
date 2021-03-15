@@ -9,7 +9,7 @@ const typeToHouse = {
 
 const similarCardTemplate = document.querySelector('#card').content.querySelector('.popup');
 
-const creatFeaturesCard = (arr, list) => {
+const createFeaturesCard = (arr, list) => {
   list.innerHTML = '';
   arr.forEach((element) => {
     const feature = document.createElement('li');
@@ -18,7 +18,7 @@ const creatFeaturesCard = (arr, list) => {
   });
 }
 
-const creatPhotosCard = (arr, list) => {
+const createPhotosCard = (arr, list) => {
   list.innerHTML = '';
   if (arr.length) {
     arr.forEach((element) => {
@@ -52,8 +52,8 @@ const renderCard = ({author, offer}) => {
   offer.description ? descriptionCard.textContent = offer.description: descriptionCard.remove();
   capacityCard.textContent = `${offer.rooms} ${getWords(offer.rooms, 'rooms')} для ${offer.guests} ${getWords(offer.guests, 'guests')}`;
   timeCard.textContent = `Заезд после ${offer.checkin}, выезд до ${offer.checkout}`;
-  creatFeaturesCard(offer.features, featuresList);
-  creatPhotosCard(offer.photos, photosCard);
+  createFeaturesCard(offer.features, featuresList);
+  createPhotosCard(offer.photos, photosCard);
 
   return similarCardElement;
 }

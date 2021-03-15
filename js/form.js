@@ -1,6 +1,6 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {resetMap} from './map.js';
+import {mapFilter, resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
 const titleLength = {
@@ -87,10 +87,11 @@ timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
 const onResetForm = () => {
-  //mapFilter.reset();
+  mapFilter.reset();
   adForm.reset();
   resetMap();
   resetPictures();
+  //вернуть маркеры на  место
 }
 
 const handleFormSubmit = () => {
@@ -110,7 +111,12 @@ adForm.addEventListener('submit', (evt) => {
   sendData(handleFormSubmit, handleFormFail, formData);
 });
 
-adFormReset.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  onResetForm();
-});
+const formReset = () =>{
+  adFormReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
+    onResetForm();
+  });
+};
+formReset();
+
+export {formReset};

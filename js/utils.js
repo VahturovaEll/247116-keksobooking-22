@@ -2,7 +2,7 @@ const words = {
   rooms: ['комнатa', 'комнаты', 'комнат'],
   guests: ['гостя', 'гостей', 'гостей'],
 }
-
+/*
 const getRandomInteger = (min, max) => {
   min = Math.ceil(min);
   max = Math.floor(max);
@@ -38,7 +38,7 @@ const getRandomElementArr = (arr) => {
 const getArrRandomLength = (arr) => {
   return arr.slice(0, getRandomInteger(0, arr.length - 1));
 }
-
+*/
 const getWords = (count, word) => {
   const num = count % 100;
   const mod = num  % 10;
@@ -60,4 +60,13 @@ const isEnterEvent = (evt) => {
   return evt.key === 'Enter';
 };
 */
-export {getRandomInteger, getRandomNumber, getRandomElementArr, getArrRandomLength, getWords, isEscEvent};
+
+const debounce = (cb, delay) => {
+  let timeout;
+  return () => {
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(cb, delay)
+  };
+};
+
+export {getWords, isEscEvent, debounce};
