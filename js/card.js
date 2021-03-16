@@ -16,7 +16,7 @@ const createFeaturesCard = (arr, list) => {
     feature.classList.add('popup__feature', `popup__feature--${element}`);
     list.appendChild(feature);
   });
-}
+};
 
 const createPhotosCard = (arr, list) => {
   list.innerHTML = '';
@@ -27,7 +27,7 @@ const createPhotosCard = (arr, list) => {
       list.appendChild(photo);
     });
   }
-}
+};
 
 const renderCard = ({author, offer}) => {
   const similarCardElement = similarCardTemplate.cloneNode(true);
@@ -56,6 +56,6 @@ const renderCard = ({author, offer}) => {
   createPhotosCard(offer.photos, photosCard);
 
   return similarCardElement;
-}
+};
 
 export {renderCard};

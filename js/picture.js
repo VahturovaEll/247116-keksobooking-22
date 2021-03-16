@@ -3,7 +3,7 @@ const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const IMG_DEFAULT = {
   DESCRIPTION: 'Фотография жилья',
   SRC: 'img/muffin-grey.svg',
-}
+};
 
 const avatarFileChooser = document.querySelector('.ad-form-header__input');
 const avatarPreview = document.querySelector('.ad-form-header__preview img');
@@ -36,8 +36,7 @@ setPreviewPhoto(avatarFileChooser, avatarPreview);
 setPreviewPhoto(houseFileChooser, housePreview);
 
 const resetPictures = () => {
-  avatarPreview.src = IMG_DEFAULT.SRC;
-  housePreview.src = IMG_DEFAULT.SRC;
+  avatarPreview.src, housePreview.src = IMG_DEFAULT.SRC;
 };
 
 export {resetPictures};

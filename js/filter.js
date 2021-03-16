@@ -1,19 +1,19 @@
-import {removeMapMarkers} from './map.js';
+import {resetMarkersPosition} from './map.js';
+import {filterForm} from './form.js';
 
 const DEFAULT_VALUE = 'any';
 const MIN_PRICE = 10000;
 const MAX_PRICE = 50000;
 
-const formFilter = document.querySelector('.map__filters');//
-const typeFilter = formFilter.querySelector('#housing-type');
-const priceFilter = formFilter.querySelector('#housing-price');
-const roomsFilter = formFilter.querySelector('#housing-rooms');
-const guestsFilter = formFilter.querySelector('#housing-guests');
-const featuresFilter = formFilter.querySelector('#housing-features');
+const typeFilter = filterForm.querySelector('#housing-type');
+const priceFilter = filterForm.querySelector('#housing-price');
+const roomsFilter = filterForm.querySelector('#housing-rooms');
+const guestsFilter = filterForm.querySelector('#housing-guests');
+const featuresFilter = filterForm.querySelector('#housing-features');
 
 const checkType = (data) => {
   return typeFilter.value === data.offer.type || typeFilter.value === DEFAULT_VALUE;
-}
+};
 
 const checkPrice = (data) => {
   switch (priceFilter.value) {
@@ -26,15 +26,15 @@ const checkPrice = (data) => {
     case 'any':
       return true;
   }
-}
+};
 
 const checkRooms = (data) => {
   return Number(roomsFilter.value) === data.offer.rooms || roomsFilter.value === DEFAULT_VALUE;
-}
+};
 
 const checkGuests = (data) => {
   return  Number(guestsFilter.value) === data.offer.guests || guestsFilter.value === DEFAULT_VALUE;
-}
+};
 
 const checkFeatures = (data) => {
   const checkedFeatures = featuresFilter.querySelectorAll('input:checked');
@@ -54,13 +54,13 @@ const checkFeatures = (data) => {
 
 const checkAllFilters = (data) => {
   return checkType(data) && checkPrice(data) && checkRooms(data) && checkGuests(data) && checkFeatures(data);
-}
+};
 
 const changeFilters = (cb) => {
-  formFilter.addEventListener('change', ()=> {
-    removeMapMarkers();
+  filterForm.addEventListener('change', () => {
+    resetMarkersPosition();
     cb();
   });
-}
+};
 
-export {checkAllFilters, changeFilters}
+export {checkAllFilters, changeFilters};

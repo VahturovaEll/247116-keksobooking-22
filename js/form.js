@@ -1,6 +1,6 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {mapFilter, resetMap} from './map.js';
+import {resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
 const titleLength = {
@@ -29,11 +29,12 @@ const timeOut = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
 const adFormReset = adForm.querySelector('.ad-form__reset');
+const filterForm = document.querySelector('.map__filters');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
   priceForm.min = minPriceOfType[typeForm.value];
-}
+};
 
 const onTitleChange = () => {
   const title = titleForm.value;
@@ -45,7 +46,7 @@ const onTitleChange = () => {
     titleForm.setCustomValidity('');
   }
   titleForm.reportValidity();
-}
+};
 
 const onPriceValue = (evt) => {
   const target = evt.target;
@@ -57,15 +58,15 @@ const onPriceValue = (evt) => {
     priceForm.setCustomValidity('');
   }
   priceForm.reportValidity();
-}
+};
 
 const onTimeInChange = (evt) => {
   timeOut.value = evt.target.value;
-}
+};
 
 const onTimeOutChange = (evt) => {
   timeIn.value = evt.target.value;
-}
+};
 
 const onRoomsChange = () => {
   const capacityOptions = capacity.options;
@@ -77,7 +78,7 @@ const onRoomsChange = () => {
       capacityOption.style.display = 'none';
     }
   }
-}
+};
 
 titleForm.addEventListener('input', onTitleChange);
 typeForm.addEventListener('change', onPriceChange);
@@ -87,22 +88,21 @@ timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
 const onResetForm = () => {
-  mapFilter.reset();
+  filterForm.reset();
   adForm.reset();
   resetMap();
   resetPictures();
-  //вернуть маркеры на  место
-}
+};
 
 const handleFormSubmit = () => {
   showSuccessModal();
   onResetForm();
-}
+};
 
 const handleFormFail = () => {
   showErrorModal();
   onResetForm();
-}
+};
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -111,12 +111,11 @@ adForm.addEventListener('submit', (evt) => {
   sendData(handleFormSubmit, handleFormFail, formData);
 });
 
-const formReset = () =>{
+const formReset = () => {
   adFormReset.addEventListener('click', (evt) => {
     evt.preventDefault();
     onResetForm();
   });
 };
-formReset();
 
-export {formReset};
+export {adForm, filterForm, formReset};

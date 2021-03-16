@@ -19,7 +19,7 @@ const showSuccessModal = () => {
 
   document.addEventListener('keydown', onPopupEscKeydown);
   main.appendChild(successPopup);
-}
+};
 
 const showErrorModal = (message) => {
   errorPopup.querySelector('.error__message').textContent = message;
@@ -30,7 +30,7 @@ const showErrorModal = (message) => {
   document.addEventListener('keydown', onPopupEscKeydown);
 
   main.appendChild(errorPopup);
-}
+};
 
 const onClosePopup = () => {
   if (main.contains(successPopup)) {
@@ -42,6 +42,6 @@ const onClosePopup = () => {
   }
 
   document.removeEventListener('keydown', onPopupEscKeydown);
-}
+};
 
 export {showSuccessModal, showErrorModal};
