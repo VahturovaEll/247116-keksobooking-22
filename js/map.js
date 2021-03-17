@@ -1,10 +1,6 @@
 /* global L:readonly */
 import {renderCard} from './card.js';
-import {adForm, filterForm} from './form.js';
-import {checkAllFilters} from './filter.js';
-import {getDataAdverts} from './data.js';
 
-const ADVERTS_COUNT = 10;
 const ROUNDING = 5;
 const ZOOM_MAP = 12;
 const CENTER_TOKYO = {
@@ -27,8 +23,10 @@ const LeafletProperties = {
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
 };
 
-const formBlocks = adForm.children;
+const filterForm = document.querySelector('.map__filters');
 const mapFilterBlocks = filterForm.children;
+const adForm = document.querySelector('.ad-form');
+const formBlocks = adForm.children;
 const addressForm = adForm.querySelector('#address');
 
 const setDisabled = (elements) => {
@@ -111,32 +109,26 @@ const icon = L.icon({
 const markers = new L.LayerGroup([]).addTo(map);
 
 const renderAdverts = (data) => {
-  const adverts = data.filter(checkAllFilters).slice(0, ADVERTS_COUNT);
-  adverts.forEach((advert) => {
+  data.forEach((elem) => {
     const marker = L.marker(
       {
-        lat: advert.location.lat,
-        lng: advert.location.lng,
+        lat: elem.location.lat,
+        lng: elem.location.lng,
       },
       {
         icon: icon,
       },
     );
 
-    marker.addTo(map).bindPopup(renderCard(advert));
+    marker.addTo(map).bindPopup(renderCard(elem));
     markers.addLayer(marker);
   });
 
   return markers;
 };
 
-const startRendering = () => {
-  markers.clearLayers();
-  getDataAdverts();
-};
-
 const resetMarkersPosition = () => {
-  startRendering();
+  markers.clearLayers();
   map.closePopup();
 };
 
@@ -144,6 +136,5 @@ const resetMap = () => {
   defaultCoordMarker();
   resetMarkersPosition();
 };
-
 
 export {renderAdverts, resetMap, resetMarkersPosition};

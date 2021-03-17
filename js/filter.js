@@ -1,10 +1,9 @@
-import {resetMarkersPosition} from './map.js';
-import {filterForm} from './form.js';
-
 const DEFAULT_VALUE = 'any';
 const MIN_PRICE = 10000;
 const MAX_PRICE = 50000;
+const ADVERTS_COUNT = 10;
 
+const filterForm = document.querySelector('.map__filters');
 const typeFilter = filterForm.querySelector('#housing-type');
 const priceFilter = filterForm.querySelector('#housing-price');
 const roomsFilter = filterForm.querySelector('#housing-rooms');
@@ -56,11 +55,8 @@ const checkAllFilters = (data) => {
   return checkType(data) && checkPrice(data) && checkRooms(data) && checkGuests(data) && checkFeatures(data);
 };
 
-const changeFilters = (cb) => {
-  filterForm.addEventListener('change', () => {
-    resetMarkersPosition();
-    cb();
-  });
+const filterData = (data) => {
+  return data.filter(checkAllFilters).slice(0, ADVERTS_COUNT);
 };
 
-export {checkAllFilters, changeFilters};
+export {checkAllFilters, filterData};

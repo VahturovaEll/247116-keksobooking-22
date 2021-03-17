@@ -1,6 +1,6 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {resetMap} from './map.js';
+import {resetMarkersPosition, resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
 const titleLength = {
@@ -20,6 +20,7 @@ const roomsToGuests = {
   100: ['0'],
 };
 
+const filterForm = document.querySelector('.map__filters');
 const adForm = document.querySelector('.ad-form');
 const typeForm = adForm.querySelector('#type');
 const priceForm = adForm.querySelector('#price');
@@ -28,8 +29,6 @@ const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
-const adFormReset = adForm.querySelector('.ad-form__reset');
-const filterForm = document.querySelector('.map__filters');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
@@ -111,11 +110,18 @@ adForm.addEventListener('submit', (evt) => {
   sendData(handleFormSubmit, handleFormFail, formData);
 });
 
-const formReset = () => {
-  adFormReset.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    onResetForm();
+const changeFilters = (cb) => {
+  filterForm.addEventListener('change', () => {
+    resetMarkersPosition();
+    cb();
   });
 };
 
-export {adForm, filterForm, formReset};
+const resetAllForms = (cb) => {
+  adForm.addEventListener('reset', () => {
+    onResetForm();
+    cb();
+  });
+};
+
+export {changeFilters, resetAllForms};

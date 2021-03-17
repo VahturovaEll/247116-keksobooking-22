@@ -10,29 +10,29 @@ const closeErrorButton = errorPopup.querySelector('.error__button');
 const onPopupEscKeydown = (evt) => {
   if (isEscEvent(evt)) {
     evt.preventDefault();
-    onClosePopup();
+    onPopupClose();
   }
 };
 
 const showSuccessModal = () => {
-  successPopup.addEventListener('click', onClosePopup);
+  successPopup.addEventListener('click', onPopupClose);
 
   document.addEventListener('keydown', onPopupEscKeydown);
   main.appendChild(successPopup);
 };
 
-const showErrorModal = (message) => {
-  errorPopup.querySelector('.error__message').textContent = message;
+const showErrorModal = () => {
+  errorPopup.querySelector('.error__message').textContent = 'Ошибка загрузки данных';
 
-  closeErrorButton.addEventListener('click', onClosePopup);
-  errorPopup.addEventListener('click', onClosePopup);
+  closeErrorButton.addEventListener('click', onPopupClose);
+  errorPopup.addEventListener('click', onPopupClose);
 
   document.addEventListener('keydown', onPopupEscKeydown);
 
   main.appendChild(errorPopup);
 };
 
-const onClosePopup = () => {
+const onPopupClose = () => {
   if (main.contains(successPopup)) {
     main.removeChild(successPopup)
   }
