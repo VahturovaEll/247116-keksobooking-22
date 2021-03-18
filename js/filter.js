@@ -1,45 +1,62 @@
-import {removeMapMarkers} from './map.js';
+const DEFAULT_VALUE = 'any';
+const MIN_PRICE = 10000;
+const MAX_PRICE = 50000;
+const ADVERTS_COUNT = 10;
 
-
-const DEFAULT_TYPE_VALUE = 'any';
-
-const formFilter = document.querySelector('.map__filters');//
-const typeFilter = formFilter.querySelector('#housing-type');/*
-const priceFilter = formFilter.querySelector('#housing-price');
-const roomsFilter = formFilter.querySelector('#housing-rooms');
-const guestsFilter = formFilter.querySelector('#housing-guests');
-const featuresFilter = formFilter.querySelector('#housing-features');*/
+const filterForm = document.querySelector('.map__filters');
+const typeFilter = filterForm.querySelector('#housing-type');
+const priceFilter = filterForm.querySelector('#housing-price');
+const roomsFilter = filterForm.querySelector('#housing-rooms');
+const guestsFilter = filterForm.querySelector('#housing-guests');
+const featuresFilter = filterForm.querySelector('#housing-features');
 
 const checkType = (data) => {
-  return typeFilter.value === data.offer.type || typeFilter.value === DEFAULT_TYPE_VALUE;
-}
-/*
-const checkPrice = () => {
+  return typeFilter.value === data.offer.type || typeFilter.value === DEFAULT_VALUE;
+};
 
-}
+const checkPrice = (data) => {
+  switch (priceFilter.value) {
+    case 'low':
+      return data.offer.price < MIN_PRICE;
+    case 'middle':
+      return data.offer.price >= MIN_PRICE && data.offer.price <= MAX_PRICE;
+    case 'high':
+      return data.offer.price > MAX_PRICE;
+    case 'any':
+      return true;
+  }
+};
 
-const checkRooms = () => {
+const checkRooms = (data) => {
+  return Number(roomsFilter.value) === data.offer.rooms || roomsFilter.value === DEFAULT_VALUE;
+};
 
-}
+const checkGuests = (data) => {
+  return  Number(guestsFilter.value) === data.offer.guests || guestsFilter.value === DEFAULT_VALUE;
+};
 
-const checkGuests = () => {
+const checkFeatures = (data) => {
+  const checkedFeatures = featuresFilter.querySelectorAll('input:checked');
 
-}
+  if (checkedFeatures.length === 0) {
+    return true;
+  }
 
-const checkFeatures = () => {
+  for (let feature of checkedFeatures) {
+    if (!data.offer.features.includes(feature.value)) {
+      return false;
+    }
+  }
 
-}
-*/
+  return true;
+};
+
 const checkAllFilters = (data) => {
-  return checkType(data);
-}
+  return checkType(data) && checkPrice(data) && checkRooms(data) && checkGuests(data) && checkFeatures(data);
+};
 
+const filterData = (data) => {
+  return data.filter(checkAllFilters).slice(0, ADVERTS_COUNT);
+};
 
-const changeFilters = (cb) => {
-  formFilter.addEventListener('change', ()=> {
-    removeMapMarkers();
-    cb();
-  });
-}
-
-export {checkAllFilters, changeFilters}
+export {checkAllFilters, filterData};

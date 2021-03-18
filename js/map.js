@@ -1,8 +1,6 @@
 /* global L:readonly */
 import {renderCard} from './card.js';
-import {checkAllFilters} from './filter.js';
 
-const ADVERTS_COUNT = 10;
 const ROUNDING = 5;
 const ZOOM_MAP = 12;
 const CENTER_TOKYO = {
@@ -23,51 +21,51 @@ const PIN_AD = {
 const LeafletProperties = {
   TILE_LAYER: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
   ATTRIBUTION: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-}
+};
 
-const mapFilter = document.querySelector('.map__filters');//
-const mapFilterBlocks = mapFilter.children;
-const form = document.querySelector('.ad-form');
-const formBlocks = form.children;
-const addressForm = form.querySelector('#address');
+const filterForm = document.querySelector('.map__filters');
+const mapFilterBlocks = filterForm.children;
+const adForm = document.querySelector('.ad-form');
+const formBlocks = adForm.children;
+const addressForm = adForm.querySelector('#address');
 
 const setDisabled = (elements) => {
   for (let element of elements) {
     element.disabled = true;
   }
-}
+};
 
 const setEnabled = (elements) => {
   for (let element of elements) {
     element.disabled = false;
   }
-}
+};
 
 const deactivePage = () => {
-  mapFilter.classList.add('map__filters--disabled');
+  filterForm.classList.add('map__filters--disabled');
   setDisabled(mapFilterBlocks);
-  form.classList.add('ad-form--disabled');
+  adForm.classList.add('ad-form--disabled');
   setDisabled(formBlocks);
-}
+};
 
 deactivePage();
 
 const activePage = () => {
-  mapFilter.classList.remove('map__filters--disabled');
+  filterForm.classList.remove('map__filters--disabled');
   setEnabled(mapFilterBlocks);
-  form.classList.remove('ad-form--disabled');
+  adForm.classList.remove('ad-form--disabled');
   setEnabled(formBlocks);
-}
+};
 
-const defaultMap = () => {
+const defaultCoordMarker = () => {
   mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
-}
+};
 
 const updateAddress = (location) => {
   const lat = location.lat.toFixed(ROUNDING);
   const lng = location.lng.toFixed(ROUNDING);
   addressForm.value = `${lat} ${lng}`;
-}
+};
 
 const map = L.map('map-canvas')
   .on('load', () => {
@@ -108,37 +106,35 @@ const icon = L.icon({
   iconAnchor: PIN_AD.iconAncor,
 });
 
-const MARKERS = [];
+const markers = new L.LayerGroup([]).addTo(map);
 
-const renderAdverts = (adverts) => {
-  adverts
-    .filter(checkAllFilters)
-    .slice(0, ADVERTS_COUNT)
-    .forEach((advert) => {
-      const marker = L.marker(
-        {
-          lat: advert.location.lat,
-          lng: advert.location.lng,
-        },
-        {
-          icon: icon,
-        },
-      );
+const renderAdverts = (data) => {
+  data.forEach((elem) => {
+    const marker = L.marker(
+      {
+        lat: elem.location.lat,
+        lng: elem.location.lng,
+      },
+      {
+        icon: icon,
+      },
+    );
 
-      marker.addTo(map).bindPopup(renderCard(advert));
-      MARKERS.push(marker);
-    });
-}
+    marker.addTo(map).bindPopup(renderCard(elem));
+    markers.addLayer(marker);
+  });
 
-const removeMapMarkers = () => {
-  MARKERS.forEach((marker) => {
-    marker.remove();
-  })
+  return markers;
+};
+
+const resetMarkersPosition = () => {
+  markers.clearLayers();
   map.closePopup();
 };
 
 const resetMap = () => {
-  defaultMap();
+  defaultCoordMarker();
+  resetMarkersPosition();
 };
 
-export {renderAdverts, resetMap, removeMapMarkers};
+export {renderAdverts, resetMap, resetMarkersPosition};

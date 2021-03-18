@@ -1,6 +1,6 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {resetMap} from './map.js';
+import {resetMarkersPosition, resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
 const titleLength = {
@@ -20,6 +20,7 @@ const roomsToGuests = {
   100: ['0'],
 };
 
+const filterForm = document.querySelector('.map__filters');
 const adForm = document.querySelector('.ad-form');
 const typeForm = adForm.querySelector('#type');
 const priceForm = adForm.querySelector('#price');
@@ -28,12 +29,11 @@ const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
-const adFormReset = adForm.querySelector('.ad-form__reset');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
   priceForm.min = minPriceOfType[typeForm.value];
-}
+};
 
 const onTitleChange = () => {
   const title = titleForm.value;
@@ -45,7 +45,7 @@ const onTitleChange = () => {
     titleForm.setCustomValidity('');
   }
   titleForm.reportValidity();
-}
+};
 
 const onPriceValue = (evt) => {
   const target = evt.target;
@@ -57,15 +57,15 @@ const onPriceValue = (evt) => {
     priceForm.setCustomValidity('');
   }
   priceForm.reportValidity();
-}
+};
 
 const onTimeInChange = (evt) => {
   timeOut.value = evt.target.value;
-}
+};
 
 const onTimeOutChange = (evt) => {
   timeIn.value = evt.target.value;
-}
+};
 
 const onRoomsChange = () => {
   const capacityOptions = capacity.options;
@@ -77,7 +77,7 @@ const onRoomsChange = () => {
       capacityOption.style.display = 'none';
     }
   }
-}
+};
 
 titleForm.addEventListener('input', onTitleChange);
 typeForm.addEventListener('change', onPriceChange);
@@ -87,21 +87,21 @@ timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
 const onResetForm = () => {
-  //mapFilter.reset();
+  filterForm.reset();
   adForm.reset();
   resetMap();
   resetPictures();
-}
+};
 
 const handleFormSubmit = () => {
   showSuccessModal();
   onResetForm();
-}
+};
 
 const handleFormFail = () => {
   showErrorModal();
   onResetForm();
-}
+};
 
 adForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
@@ -110,7 +110,18 @@ adForm.addEventListener('submit', (evt) => {
   sendData(handleFormSubmit, handleFormFail, formData);
 });
 
-adFormReset.addEventListener('click', (evt) => {
-  evt.preventDefault();
-  onResetForm();
-});
+const changeFilters = (cb) => {
+  filterForm.addEventListener('change', () => {
+    resetMarkersPosition();
+    cb();
+  });
+};
+
+const resetAllForms = (cb) => {
+  adForm.addEventListener('reset', () => {
+    onResetForm();
+    cb();
+  });
+};
+
+export {changeFilters, resetAllForms};
