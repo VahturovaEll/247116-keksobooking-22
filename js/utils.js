@@ -28,4 +28,4 @@ const debounce = (cb, delay) => {
   };
 };
 
-export {getWords, isEscEvent, debounce}
+export {getWords, isEscEvent, debounce};
