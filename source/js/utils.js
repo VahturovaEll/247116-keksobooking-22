@@ -23,7 +23,9 @@ const isEscEvent = (evt) => {
 const debounce = (cb, delay) => {
   let timeout;
   return () => {
-    if (timeout) clearTimeout(timeout);
+    if (timeout) {
+      clearTimeout(timeout)
+    }
     timeout = setTimeout(cb, delay)
   };
 };
