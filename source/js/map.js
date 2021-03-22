@@ -1,6 +1,6 @@
-/* global L:readonly */
 import {renderCard} from './card.js';
 
+const L = window.L;
 const ROUNDING = 5;
 const ZOOM_MAP = 12;
 const CENTER_TOKYO = {
@@ -56,11 +56,11 @@ const activePage = () => {
   adForm.classList.remove('ad-form--disabled');
   setEnabled(formBlocks);
 };
-
+/*
 const defaultCoordMarker = () => {
   mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
 };
-
+*/
 const updateAddress = (location) => {
   const lat = location.lat.toFixed(ROUNDING);
   const lng = location.lng.toFixed(ROUNDING);
@@ -130,6 +130,12 @@ const renderAdverts = (data) => {
 const resetMarkersPosition = () => {
   markers.clearLayers();
   map.closePopup();
+};
+
+const defaultCoordMarker = () => {
+  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();/*
+  updateAddress(CENTER_TOKYO);
+  map.setView(CENTER_TOKYO, ZOOM_MAP);*/
 };
 
 const resetMap = () => {

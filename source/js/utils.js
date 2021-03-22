@@ -17,7 +17,7 @@ const getWords = (count, word) => {
 };
 
 const isEscEvent = (evt) => {
-  return evt.key === 'Escape' || evt.key === 'Esc';
+  return evt.key === ('Escape' || 'Esc');
 };
 
 const debounce = (cb, delay) => {

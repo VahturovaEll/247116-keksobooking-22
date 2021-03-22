@@ -1,6 +1,6 @@
 import {debounce} from './utils.js';
 import {getData} from './server.js';
-import {renderAdverts} from './map.js';
+import {renderAdverts, resetMarkersPosition} from './map.js';
 import {changeFilters, resetAllForms} from './form.js';
 import {filterData} from './filter.js';
 import {showErrorModal} from './popup.js';
@@ -12,7 +12,8 @@ const sendSuccess = () => {
     renderAdverts(data);
 
     const renderFilteredData = () => {
-      renderAdverts(filterData(data))
+      resetMarkersPosition();
+      renderAdverts(filterData(data));
     };
 
     changeFilters(debounce(renderFilteredData, RERENDER_DELAY));

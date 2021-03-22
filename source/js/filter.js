@@ -4,14 +4,30 @@ const MAX_PRICE = 50000;
 const ADVERTS_COUNT = 10;
 
 const filterForm = document.querySelector('.map__filters');
-const typeFilter = filterForm.querySelector('#housing-type');
+//const typeFilter = filterForm.querySelector('#housing-type');
 const priceFilter = filterForm.querySelector('#housing-price');
-const roomsFilter = filterForm.querySelector('#housing-rooms');
-const guestsFilter = filterForm.querySelector('#housing-guests');
+//const roomsFilter = filterForm.querySelector('#housing-rooms');
+//const guestsFilter = filterForm.querySelector('#housing-guests');
 const featuresFilter = filterForm.querySelector('#housing-features');
-
+/*
 const checkType = (data) => {
   return typeFilter.value === data.offer.type || typeFilter.value === DEFAULT_VALUE;
+};
+
+const checkRooms = (data) => {
+  return Number(roomsFilter.value) === data.offer.rooms || roomsFilter.value === DEFAULT_VALUE;
+};
+
+const checkGuests = (data) => {
+  return  Number(guestsFilter.value) === data.offer.guests || guestsFilter.value === DEFAULT_VALUE;
+};
+*/
+const checkType = (data, type, value) => {
+  if (value === DEFAULT_VALUE) {
+    return true;
+  }
+
+  return data.offer[type].toString() === (value || DEFAULT_VALUE);
 };
 
 const checkPrice = (data) => {
@@ -27,20 +43,8 @@ const checkPrice = (data) => {
   }
 };
 
-const checkRooms = (data) => {
-  return Number(roomsFilter.value) === data.offer.rooms || roomsFilter.value === DEFAULT_VALUE;
-};
-
-const checkGuests = (data) => {
-  return  Number(guestsFilter.value) === data.offer.guests || guestsFilter.value === DEFAULT_VALUE;
-};
-
 const checkFeatures = (data) => {
   const checkedFeatures = featuresFilter.querySelectorAll('input:checked');
-
-  if (checkedFeatures.length === 0) {
-    return true;
-  }
 
   for (let feature of checkedFeatures) {
     if (!data.offer.features.includes(feature.value)) {
@@ -52,7 +56,7 @@ const checkFeatures = (data) => {
 };
 
 const checkAllFilters = (data) => {
-  return checkType(data) && checkPrice(data) && checkRooms(data) && checkGuests(data) && checkFeatures(data);
+  return checkType(data) && checkPrice(data) && checkFeatures(data);
 };
 
 const filterData = (data) => {
