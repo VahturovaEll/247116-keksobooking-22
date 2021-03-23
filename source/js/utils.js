@@ -17,13 +17,15 @@ const getWords = (count, word) => {
 };
 
 const isEscEvent = (evt) => {
-  return evt.key === 'Escape' || evt.key === 'Esc';
+  return evt.key === ('Escape' || 'Esc');
 };
 
 const debounce = (cb, delay) => {
   let timeout;
   return () => {
-    if (timeout) clearTimeout(timeout);
+    if (timeout) {
+      clearTimeout(timeout)
+    }
     timeout = setTimeout(cb, delay)
   };
 };

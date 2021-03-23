@@ -1,12 +1,8 @@
 import {showSuccessModal, showErrorModal} from './popup.js';
 import {sendData} from './server.js';
-import {resetMarkersPosition, resetMap} from './map.js';
+import {resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
-const titleLength = {
-  min: 30,
-  max: 100,
-};
 const minPriceOfType = {
   bungalow: '0',
   flat: '1000',
@@ -29,30 +25,41 @@ const timeIn = adForm.querySelector('#timein');
 const timeOut = adForm.querySelector('#timeout');
 const roomNumber = adForm.querySelector('#room_number');
 const capacity = adForm.querySelector('#capacity');
+const buttonReset = adForm.querySelector('.ad-form__reset');
 
 const onPriceChange = () => {
   priceForm.placeholder = minPriceOfType[typeForm.value];
   priceForm.min = minPriceOfType[typeForm.value];
 };
 
-const onTitleChange = () => {
+const onTitleValueInvalid = () => {
+  if (titleForm.validity.valueMissing) {
+    titleForm.setCustomValidity('Обязательное поле для заполнения!');
+  }
+};
+
+const onTitleValueInput = () => {
   const title = titleForm.value;
   if (titleForm.validity.tooShort) {
-    titleForm.setCustomValidity(`Ещё ${titleLength.min - title.length} симв.`);
+    titleForm.setCustomValidity(`Ещё ${titleForm.minLength - title.length} симв.`);
   } else if (titleForm.validity.tooLong) {
-    titleForm.setCustomValidity(`Лишних ${title.length - titleLength.max} симв.`);
+    titleForm.setCustomValidity(`Лишних ${title.length - titleForm.maxLength} симв.`);
+  } else if (titleForm.validity.valueMissing) {
+    titleForm.setCustomValidity('Обязательное поле для заполнения!');
   } else {
     titleForm.setCustomValidity('');
   }
   titleForm.reportValidity();
 };
 
-const onPriceValue = (evt) => {
+const onPriceValueInput = (evt) => {
   const target = evt.target;
   if (target.validity.rangeUnderflow) {
     priceForm.setCustomValidity(`Цена не ниже ${target.min}`);
   } else if (target.validity.rangeOverflow) {
     priceForm.setCustomValidity(`Цена не больше ${target.max}`);
+  } else if (target.validity.valueMissing) {
+    priceForm.setCustomValidity('Обязательное поле для заполнения!');
   } else {
     priceForm.setCustomValidity('');
   }
@@ -70,27 +77,28 @@ const onTimeOutChange = (evt) => {
 const onRoomsChange = () => {
   const capacityOptions = capacity.options;
   for (let capacityOption of capacityOptions) {
-    if (roomsToGuests[roomNumber.value].includes(capacityOption.value)) {
-      capacityOption.selected = true;
-      capacityOption.style.display = 'block';
-    } else {
-      capacityOption.style.display = 'none';
-    }
+    capacityOption.disabled = !roomsToGuests[roomNumber.value].includes(capacityOption.value);
+    capacityOption.selected = !capacityOption.disabled;
   }
 };
 
-titleForm.addEventListener('input', onTitleChange);
+onRoomsChange();
+
+titleForm.addEventListener('invalid', onTitleValueInvalid);
+titleForm.addEventListener('input', onTitleValueInput);
 typeForm.addEventListener('change', onPriceChange);
-priceForm.addEventListener('input', onPriceValue);
+priceForm.addEventListener('input', onPriceValueInput);
 timeIn.addEventListener('change', onTimeInChange);
 timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
 const onResetForm = () => {
-  filterForm.reset();
   adForm.reset();
+  filterForm.reset();
   resetMap();
   resetPictures();
+  const pricePlaceholder = '0';
+  priceForm.placeholder = pricePlaceholder;
 };
 
 const handleFormSubmit = () => {
@@ -112,13 +120,13 @@ adForm.addEventListener('submit', (evt) => {
 
 const changeFilters = (cb) => {
   filterForm.addEventListener('change', () => {
-    resetMarkersPosition();
     cb();
   });
 };
 
 const resetAllForms = (cb) => {
-  adForm.addEventListener('reset', () => {
+  buttonReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
     onResetForm();
     cb();
   });

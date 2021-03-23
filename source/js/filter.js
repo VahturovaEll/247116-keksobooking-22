@@ -10,8 +10,12 @@ const roomsFilter = filterForm.querySelector('#housing-rooms');
 const guestsFilter = filterForm.querySelector('#housing-guests');
 const featuresFilter = filterForm.querySelector('#housing-features');
 
-const checkType = (data) => {
-  return typeFilter.value === data.offer.type || typeFilter.value === DEFAULT_VALUE;
+const checkType = (data, type, value) => {
+  if (value === DEFAULT_VALUE) {
+    return true;
+  }
+
+  return data.offer[type].toString() === (value || DEFAULT_VALUE);
 };
 
 const checkPrice = (data) => {
@@ -27,14 +31,6 @@ const checkPrice = (data) => {
   }
 };
 
-const checkRooms = (data) => {
-  return Number(roomsFilter.value) === data.offer.rooms || roomsFilter.value === DEFAULT_VALUE;
-};
-
-const checkGuests = (data) => {
-  return  Number(guestsFilter.value) === data.offer.guests || guestsFilter.value === DEFAULT_VALUE;
-};
-
 const checkFeatures = (data) => {
   const checkedFeatures = featuresFilter.querySelectorAll('input:checked');
 
@@ -42,17 +38,19 @@ const checkFeatures = (data) => {
     return true;
   }
 
-  for (let feature of checkedFeatures) {
-    if (!data.offer.features.includes(feature.value)) {
-      return false;
-    }
-  }
-
-  return true;
+  return Array.from(checkedFeatures).every((feature) => {
+    return  data.offer.features.includes(feature.value);
+  });
 };
 
 const checkAllFilters = (data) => {
-  return checkType(data) && checkPrice(data) && checkRooms(data) && checkGuests(data) && checkFeatures(data);
+  const isTypeCheck = checkType(data, 'type', typeFilter.value);
+  const isPriceCheck = checkPrice(data);
+  const isRoomsCheck = checkType(data, 'rooms', roomsFilter.value);
+  const isGuestsCheck = checkType(data, 'guests', guestsFilter.value);
+  const isFeaturesCheck = checkFeatures(data);
+
+  return isTypeCheck && isPriceCheck && isRoomsCheck  &&  isGuestsCheck && isFeaturesCheck;
 };
 
 const filterData = (data) => {
