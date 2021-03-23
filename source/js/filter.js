@@ -34,11 +34,9 @@ const checkPrice = (data) => {
 const checkFeatures = (data) => {
   const checkedFeatures = featuresFilter.querySelectorAll('input:checked');
 
-  for (let feature of checkedFeatures) {
-    return !data.offer.features.includes(feature.value);
-  }
-
-  return true;
+  return Array.from(checkedFeatures).every((feature) => {
+    return  data.offer.features.includes(feature.value);
+  });
 };
 
 const checkAllFilters = (data) => {

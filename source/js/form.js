@@ -35,8 +35,6 @@ const onPriceChange = () => {
 const onTitleValueInvalid = () => {
   if (titleForm.validity.valueMissing) {
     titleForm.setCustomValidity('Обязательное поле для заполнения!');
-  } else {
-    titleForm.setCustomValidity('');
   }
 };
 
