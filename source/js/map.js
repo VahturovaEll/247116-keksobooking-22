@@ -56,11 +56,7 @@ const activePage = () => {
   adForm.classList.remove('ad-form--disabled');
   setEnabled(formBlocks);
 };
-/*
-const defaultCoordMarker = () => {
-  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
-};
-*/
+
 const updateAddress = (location) => {
   const lat = location.lat.toFixed(ROUNDING);
   const lng = location.lng.toFixed(ROUNDING);
@@ -127,19 +123,18 @@ const renderAdverts = (data) => {
   return markers;
 };
 
+const defaultMarker = () => {
+  map.setView(CENTER_TOKYO, ZOOM_MAP);
+  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();
+};
+
 const resetMarkersPosition = () => {
   markers.clearLayers();
   map.closePopup();
 };
 
-const defaultCoordMarker = () => {
-  mainMarker.setLatLng([CENTER_TOKYO.lat, CENTER_TOKYO.lng]).update();/*
-  updateAddress(CENTER_TOKYO);
-  map.setView(CENTER_TOKYO, ZOOM_MAP);*/
-};
-
 const resetMap = () => {
-  defaultCoordMarker();
+  defaultMarker();
   resetMarkersPosition();
 };
 

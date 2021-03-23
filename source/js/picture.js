@@ -36,7 +36,8 @@ setPreviewPhoto(avatarFileChooser, avatarPreview);
 setPreviewPhoto(houseFileChooser, housePreview);
 
 const resetPictures = () => {
-  avatarPreview.src, housePreview.src = IMG_DEFAULT.SRC;
+  avatarPreview.src = IMG_DEFAULT.SRC;
+  housePreview.src = IMG_DEFAULT.SRC;
 };
 
 export {resetPictures};

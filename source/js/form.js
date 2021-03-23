@@ -3,11 +3,6 @@ import {sendData} from './server.js';
 import {resetMap} from './map.js';
 import {resetPictures} from './picture.js';
 
-const pricePlaceholder = '0';
-const titleLength = {
-  min: 30,
-  max: 100,
-};
 const minPriceOfType = {
   bungalow: '0',
   flat: '1000',
@@ -37,12 +32,22 @@ const onPriceChange = () => {
   priceForm.min = minPriceOfType[typeForm.value];
 };
 
+const onTitleValueInvalid = () => {
+  if (titleForm.validity.valueMissing) {
+    titleForm.setCustomValidity('Обязательное поле для заполнения!');
+  } else {
+    titleForm.setCustomValidity('');
+  }
+};
+
 const onTitleValueInput = () => {
   const title = titleForm.value;
   if (titleForm.validity.tooShort) {
-    titleForm.setCustomValidity(`Ещё ${titleLength.min - title.length} симв.`);
+    titleForm.setCustomValidity(`Ещё ${titleForm.minLength - title.length} симв.`);
   } else if (titleForm.validity.tooLong) {
-    titleForm.setCustomValidity(`Лишних ${title.length - titleLength.max} симв.`);
+    titleForm.setCustomValidity(`Лишних ${title.length - titleForm.maxLength} симв.`);
+  } else if (titleForm.validity.valueMissing) {
+    titleForm.setCustomValidity('Обязательное поле для заполнения!');
   } else {
     titleForm.setCustomValidity('');
   }
@@ -55,6 +60,8 @@ const onPriceValueInput = (evt) => {
     priceForm.setCustomValidity(`Цена не ниже ${target.min}`);
   } else if (target.validity.rangeOverflow) {
     priceForm.setCustomValidity(`Цена не больше ${target.max}`);
+  } else if (target.validity.valueMissing) {
+    priceForm.setCustomValidity('Обязательное поле для заполнения!');
   } else {
     priceForm.setCustomValidity('');
   }
@@ -77,8 +84,10 @@ const onRoomsChange = () => {
   }
 };
 
-//titleForm.addEventListener('input', onTitleValueInput);
-titleForm.addEventListener('invalid', onTitleValueInput);
+onRoomsChange();
+
+titleForm.addEventListener('invalid', onTitleValueInvalid);
+titleForm.addEventListener('input', onTitleValueInput);
 typeForm.addEventListener('change', onPriceChange);
 priceForm.addEventListener('input', onPriceValueInput);
 timeIn.addEventListener('change', onTimeInChange);
@@ -86,11 +95,12 @@ timeOut.addEventListener('change', onTimeOutChange);
 roomNumber.addEventListener('change', onRoomsChange);
 
 const onResetForm = () => {
-  filterForm.reset();
   adForm.reset();
-  resetMap();//зато удаляется адрес
-  resetPictures();//аватар не удаляется
-  priceForm.placeholder = pricePlaceholder;//не ставит
+  filterForm.reset();
+  resetMap();
+  resetPictures();
+  const pricePlaceholder = '0';
+  priceForm.placeholder = pricePlaceholder;
 };
 
 const handleFormSubmit = () => {
@@ -117,7 +127,8 @@ const changeFilters = (cb) => {
 };
 
 const resetAllForms = (cb) => {
-  buttonReset.addEventListener('reset', () => {
+  buttonReset.addEventListener('click', (evt) => {
+    evt.preventDefault();
     onResetForm();
     cb();
   });
