@@ -41,16 +41,16 @@ const setEnabled = (elements) => {
   }
 };
 
-const deactivePage = () => {
+const deactivatePage = () => {
   filterForm.classList.add('map__filters--disabled');
   setDisabled(mapFilterBlocks);
   adForm.classList.add('ad-form--disabled');
   setDisabled(formBlocks);
 };
 
-deactivePage();
+deactivatePage();
 
-const activePage = () => {
+const activatePage = () => {
   filterForm.classList.remove('map__filters--disabled');
   setEnabled(mapFilterBlocks);
   adForm.classList.remove('ad-form--disabled');
@@ -66,7 +66,7 @@ const updateAddress = (location) => {
 const map = L.map('map-canvas')
   .on('load', () => {
     updateAddress(CENTER_TOKYO);
-    activePage();
+    activatePage();
   }).setView(CENTER_TOKYO, ZOOM_MAP);
 
 L.tileLayer(

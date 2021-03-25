@@ -3,13 +3,22 @@ const words = {
   guests: ['гостя', 'гостей', 'гостей'],
 };
 
+const Count = {
+  ONE: 1,
+  ELEVEN: 11,
+  TWO: 2,
+  FOUR: 4,
+  TEN: 10,
+  TWENTY: 20,
+};
+
 const getWords = (count, word) => {
   const num = count % 100;
   const mod = num  % 10;
 
-  if (num !== 11 && mod === 1) {
+  if (num !== Count.ELEVEN && mod === Count.ONE) {
     return words[word][0]
-  } else if ( mod >= 2 && mod <= 4 && (num < 10 || num > 20)) {
+  } else if (mod >= Count.TWO && mod <= Count.FOUR && (num < Count.TEN || num > Count.TWENTY)) {
     return words[word][1]
   } else {
     return words[word][2]
