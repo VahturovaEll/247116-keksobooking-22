@@ -10,11 +10,12 @@ const Count = {
   FOUR: 4,
   TEN: 10,
   TWENTY: 20,
+  ONE_HUNDRED: 100,
 };
 
 const getWords = (count, word) => {
-  const num = count % 100;
-  const mod = num  % 10;
+  const num = count % Count.ONE_HUNDRED;
+  const mod = num  % Count.TEN;
 
   if (num !== Count.ELEVEN && mod === Count.ONE) {
     return words[word][0]
